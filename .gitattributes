@@ -1,0 +1,10 @@
+# GitHub Linguist: el proyecto entregable es Java.
+# Los reportes generados por JaCoCo/Sonar no deben contar como lenguajes del repositorio.
+target/** linguist-generated=true linguist-detectable=false
+capturas/** linguist-documentation=true linguist-detectable=false
+
+*.html linguist-generated=true linguist-detectable=false
+*.css linguist-generated=true linguist-detectable=false
+*.js linguist-generated=true linguist-detectable=false
+
+*.java linguist-detectable=true
