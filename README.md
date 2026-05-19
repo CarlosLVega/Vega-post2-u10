@@ -1,6 +1,5 @@
 # Productos Service - Post-Contenido 2 U10
 
-[![CI con SonarQube](https://github.com/CarlosLVega/Vega-post2-u10/actions/workflows/ci.yml/badge.svg)](https://github.com/CarlosLVega/Vega-post2-u10/actions/workflows/ci.yml)
 
 Proyecto finalizado para el laboratorio de la Unidad 10: Metricas de Calidad y SonarQube. La entrega incluye configuracion de JaCoCo, SonarQube/SonarCloud, correccion de un bug critico, correccion de tres Code Smells, pruebas unitarias, evidencias comparativas y automatizacion con GitHub Actions.
 
