@@ -1,0 +1,5 @@
+edu\universidad\productos\service\ProductoService.class
+edu\universidad\productos\ProductosServiceApplication.class
+edu\universidad\productos\controller\ProductoController.class
+edu\universidad\productos\repository\ProductoRepository.class
+edu\universidad\productos\model\Producto.class

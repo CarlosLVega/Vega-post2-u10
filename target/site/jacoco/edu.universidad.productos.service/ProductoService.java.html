@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Productos Service</a> &gt; <a href="index.source.html" class="el_package">edu.universidad.productos.service</a> &gt; <span class="el_source">ProductoService.java</span></div><h1>ProductoService.java</h1><pre class="source lang-java linenums">package edu.universidad.productos.service;
+
+import edu.universidad.productos.model.Producto;
+import edu.universidad.productos.repository.ProductoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+<span class="fc" id="L11">public class ProductoService {</span>
+
+    @Autowired
+    private ProductoRepository repo;
+
+    public Producto buscar(Long id) {
+<span class="nc" id="L17">        return repo.findById(id).orElse(null);</span>
+    }
+
+    public List&lt;Producto&gt; listar() {
+<span class="nc" id="L21">        return repo.findAll();</span>
+    }
+
+    public Producto procesarProducto(String n, Double precio, Integer stock) {
+<span class="pc bpc" id="L25" title="1 of 4 branches missed.">        if (n == null || n.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L26">            throw new IllegalArgumentException(&quot;nombre requerido&quot;);</span>
+        }
+<span class="pc bpc" id="L28" title="2 of 4 branches missed.">        if (precio == null || precio &lt;= 0) {</span>
+<span class="nc" id="L29">            throw new IllegalArgumentException(&quot;precio invalido&quot;);</span>
+        }
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (precio &gt; 999999) {</span>
+<span class="nc" id="L32">            throw new IllegalArgumentException(&quot;precio muy alto&quot;);</span>
+        }
+<span class="pc bpc" id="L34" title="2 of 4 branches missed.">        if (stock == null || stock &lt; 0) {</span>
+<span class="nc" id="L35">            throw new IllegalArgumentException(&quot;stock invalido&quot;);</span>
+        }
+
+<span class="fc" id="L38">        Producto producto = new Producto();</span>
+<span class="fc" id="L39">        producto.setNombre(n);</span>
+<span class="fc" id="L40">        producto.setPrecio(precio);</span>
+<span class="fc" id="L41">        producto.setStock(stock);</span>
+<span class="fc" id="L42">        return repo.save(producto);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
