@@ -32,10 +32,20 @@ Este primer estado conserva los hallazgos solicitados para documentar el punto d
 
 | Hallazgo inicial | Archivo | Estado |
 | --- | --- | --- |
-| Bug: `orElse(null)` en `buscar()` | `ProductoService` | Pendiente de corregir |
-| Code Smell: inyeccion por campo con `@Autowired` | `ProductoService` | Pendiente de corregir |
-| Code Smell: `n.equals("")` | `ProductoService` | Pendiente de corregir |
-| Code Smell: alta complejidad en `procesarProducto()` | `ProductoService` | Pendiente de corregir |
+| Bug: `orElse(null)` en `buscar()` | `ProductoService` | Corregido con `NoSuchElementException` |
+| Code Smell: inyeccion por campo con `@Autowired` | `ProductoService` | Corregido con inyeccion por constructor |
+| Code Smell: `n.equals("")` | `ProductoService` | Corregido con `nombre.isBlank()` |
+| Code Smell: alta complejidad en `procesarProducto()` | `ProductoService` | Corregido extrayendo `validarDatos()` |
+
+## Correcciones aplicadas
+
+| Requisito de la rubrica | Evidencia en el codigo |
+| --- | --- |
+| `buscar()` no retorna `null` | Lanza `NoSuchElementException` con mensaje descriptivo |
+| Prueba para id inexistente | `buscarLanzaExcepcionCuandoProductoNoExiste()` |
+| Inyeccion por constructor | `ProductoService(ProductoRepository productoRepository)` |
+| Uso de `isBlank()` | Validacion de nombre en `validarDatos()` |
+| Menor complejidad ciclomática | `procesarProducto()` delega validaciones a `validarDatos()` |
 
 ## Ejecucion local
 

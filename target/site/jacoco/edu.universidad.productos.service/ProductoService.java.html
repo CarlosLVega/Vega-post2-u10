@@ -2,44 +2,52 @@
 
 import edu.universidad.productos.model.Producto;
 import edu.universidad.productos.repository.ProductoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
-<span class="fc" id="L11">public class ProductoService {</span>
+public class ProductoService {
 
-    @Autowired
-    private ProductoRepository repo;
+    private final ProductoRepository productoRepository;
+
+<span class="fc" id="L15">    public ProductoService(ProductoRepository productoRepository) {</span>
+<span class="fc" id="L16">        this.productoRepository = productoRepository;</span>
+<span class="fc" id="L17">    }</span>
 
     public Producto buscar(Long id) {
-<span class="nc" id="L17">        return repo.findById(id).orElse(null);</span>
+<span class="pc" id="L20">        return productoRepository.findById(id)</span>
+<span class="pc" id="L21">                .orElseThrow(() -&gt; new NoSuchElementException(&quot;Producto no encontrado: &quot; + id));</span>
     }
 
     public List&lt;Producto&gt; listar() {
-<span class="nc" id="L21">        return repo.findAll();</span>
+<span class="nc" id="L25">        return productoRepository.findAll();</span>
     }
 
-    public Producto procesarProducto(String n, Double precio, Integer stock) {
-<span class="pc bpc" id="L25" title="1 of 4 branches missed.">        if (n == null || n.equals(&quot;&quot;)) {</span>
-<span class="fc" id="L26">            throw new IllegalArgumentException(&quot;nombre requerido&quot;);</span>
-        }
-<span class="pc bpc" id="L28" title="2 of 4 branches missed.">        if (precio == null || precio &lt;= 0) {</span>
-<span class="nc" id="L29">            throw new IllegalArgumentException(&quot;precio invalido&quot;);</span>
-        }
-<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (precio &gt; 999999) {</span>
-<span class="nc" id="L32">            throw new IllegalArgumentException(&quot;precio muy alto&quot;);</span>
-        }
-<span class="pc bpc" id="L34" title="2 of 4 branches missed.">        if (stock == null || stock &lt; 0) {</span>
-<span class="nc" id="L35">            throw new IllegalArgumentException(&quot;stock invalido&quot;);</span>
-        }
+    public Producto procesarProducto(String nombre, Double precio, Integer stock) {
+<span class="fc" id="L29">        validarDatos(nombre, precio, stock);</span>
 
-<span class="fc" id="L38">        Producto producto = new Producto();</span>
-<span class="fc" id="L39">        producto.setNombre(n);</span>
-<span class="fc" id="L40">        producto.setPrecio(precio);</span>
-<span class="fc" id="L41">        producto.setStock(stock);</span>
-<span class="fc" id="L42">        return repo.save(producto);</span>
+<span class="fc" id="L31">        Producto producto = new Producto();</span>
+<span class="fc" id="L32">        producto.setNombre(nombre.strip());</span>
+<span class="fc" id="L33">        producto.setPrecio(precio);</span>
+<span class="fc" id="L34">        producto.setStock(stock);</span>
+<span class="fc" id="L35">        return productoRepository.save(producto);</span>
     }
+
+    private void validarDatos(String nombre, Double precio, Integer stock) {
+<span class="pc bpc" id="L39" title="1 of 4 branches missed.">        if (nombre == null || nombre.isBlank()) {</span>
+<span class="fc" id="L40">            throw new IllegalArgumentException(&quot;El nombre no puede estar vacio&quot;);</span>
+        }
+<span class="pc bpc" id="L42" title="2 of 4 branches missed.">        if (precio == null || precio &lt;= 0) {</span>
+<span class="nc" id="L43">            throw new IllegalArgumentException(&quot;El precio debe ser mayor a cero&quot;);</span>
+        }
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">        if (precio &gt; 999999) {</span>
+<span class="nc" id="L46">            throw new IllegalArgumentException(&quot;El precio excede el maximo permitido&quot;);</span>
+        }
+<span class="pc bpc" id="L48" title="2 of 4 branches missed.">        if (stock == null || stock &lt; 0) {</span>
+<span class="nc" id="L49">            throw new IllegalArgumentException(&quot;El stock no puede ser negativo&quot;);</span>
+        }
+<span class="fc" id="L51">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
