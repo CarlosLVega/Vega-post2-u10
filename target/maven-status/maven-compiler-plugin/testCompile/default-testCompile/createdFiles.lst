@@ -1,1 +1,4 @@
+edu\universidad\productos\controller\ProductoControllerTest.class
+edu\universidad\productos\controller\ProductoControllerTest$ProductoServiceStub.class
 edu\universidad\productos\service\ProductoServiceTest.class
+edu\universidad\productos\model\ProductoTest.class

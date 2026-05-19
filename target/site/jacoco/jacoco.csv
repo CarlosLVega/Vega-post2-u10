@@ -1,5 +1,5 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-Productos Service,edu.universidad.productos.service,ProductoService,22,71,6,8,4,17,7,6,1,5
-Productos Service,edu.universidad.productos.controller,ProductoController,25,0,0,0,9,0,4,0,4,0
+Productos Service,edu.universidad.productos.service,ProductoService,0,93,3,11,0,21,3,10,0,6
+Productos Service,edu.universidad.productos.controller,ProductoController,0,25,0,0,0,9,0,4,0,4
 Productos Service,edu.universidad.productos,ProductosServiceApplication,8,0,0,0,3,0,2,0,2,0
-Productos Service,edu.universidad.productos.model,Producto,7,24,0,0,3,10,2,7,2,7
+Productos Service,edu.universidad.productos.model,Producto,0,31,0,0,0,13,0,9,0,9

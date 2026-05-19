@@ -19,27 +19,27 @@ public class ProductoController {
 
     private final ProductoService productoService;
 
-<span class="nc" id="L22">    public ProductoController(ProductoService productoService) {</span>
-<span class="nc" id="L23">        this.productoService = productoService;</span>
-<span class="nc" id="L24">    }</span>
+<span class="fc" id="L22">    public ProductoController(ProductoService productoService) {</span>
+<span class="fc" id="L23">        this.productoService = productoService;</span>
+<span class="fc" id="L24">    }</span>
 
     @GetMapping
     public List&lt;Producto&gt; listar() {
-<span class="nc" id="L28">        return productoService.listar();</span>
+<span class="fc" id="L28">        return productoService.listar();</span>
     }
 
     @GetMapping(&quot;/{id}&quot;)
     public Producto buscar(@PathVariable Long id) {
-<span class="nc" id="L33">        return productoService.buscar(id);</span>
+<span class="fc" id="L33">        return productoService.buscar(id);</span>
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Producto crear(@RequestBody Producto producto) {
-<span class="nc" id="L39">        return productoService.procesarProducto(</span>
-<span class="nc" id="L40">                producto.getNombre(),</span>
-<span class="nc" id="L41">                producto.getPrecio(),</span>
-<span class="nc" id="L42">                producto.getStock()</span>
+<span class="fc" id="L39">        return productoService.procesarProducto(</span>
+<span class="fc" id="L40">                producto.getNombre(),</span>
+<span class="fc" id="L41">                producto.getPrecio(),</span>
+<span class="fc" id="L42">                producto.getStock()</span>
         );
     }
 }

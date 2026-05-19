@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -52,5 +53,50 @@ class ProductoServiceTest {
                 () -> productoService.buscar(99L));
 
         assertThat(exception.getMessage()).isEqualTo("Producto no encontrado: 99");
+    }
+
+    @Test
+    void buscarRetornaProductoExistente() {
+        ProductoService productoService = new ProductoService(productoRepository);
+        Producto producto = new Producto();
+        producto.setId(1L);
+        when(productoRepository.findById(1L)).thenReturn(Optional.of(producto));
+
+        Producto encontrado = productoService.buscar(1L);
+
+        assertThat(encontrado.getId()).isEqualTo(1L);
+    }
+
+    @Test
+    void listarRetornaProductosDelRepositorio() {
+        ProductoService productoService = new ProductoService(productoRepository);
+        Producto producto = new Producto();
+        when(productoRepository.findAll()).thenReturn(List.of(producto));
+
+        assertThat(productoService.listar()).containsExactly(producto);
+    }
+
+    @Test
+    void procesarProductoRechazaPrecioNuloOCero() {
+        ProductoService productoService = new ProductoService(productoRepository);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> productoService.procesarProducto("Mouse", 0.0, 10));
+    }
+
+    @Test
+    void procesarProductoRechazaPrecioMayorAlMaximo() {
+        ProductoService productoService = new ProductoService(productoRepository);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> productoService.procesarProducto("Mouse", 1000000.0, 10));
+    }
+
+    @Test
+    void procesarProductoRechazaStockNegativo() {
+        ProductoService productoService = new ProductoService(productoRepository);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> productoService.procesarProducto("Mouse", 120000.0, -1));
     }
 }

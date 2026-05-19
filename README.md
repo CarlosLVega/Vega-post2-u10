@@ -1,82 +1,124 @@
 # Productos Service - Post-Contenido 2 U10
 
-Proyecto base para el laboratorio de Metricas de Calidad y SonarQube.
+[![CI con SonarQube](https://github.com/CarlosLVega/Vega-post2-u10/actions/workflows/ci.yml/badge.svg)](https://github.com/CarlosLVega/Vega-post2-u10/actions/workflows/ci.yml)
 
-## Objetivo
-
-Configurar un Quality Gate personalizado en SonarQube, corregir un bug y al menos tres Code Smells detectados, ejecutar un segundo analisis con mejora de metricas e integrar la inspeccion al pipeline de GitHub Actions.
+Proyecto del laboratorio de la Unidad 10: Metricas de Calidad y SonarQube. La entrega configura JaCoCo, prepara el analisis en SonarQube/SonarCloud, corrige el bug principal y tres Code Smells, y automatiza la inspeccion con GitHub Actions.
 
 ## Tecnologias
 
 - Java 21
 - Maven 3.9+
 - Spring Boot 3
-- SonarQube / SonarCloud
+- H2 Database
+- JUnit 5 y Mockito
 - JaCoCo
+- SonarQube / SonarCloud
 - GitHub Actions
 
-## Quality Gate requerido
+## Quality Gate
 
-Nombre del Quality Gate: **Estandar Universidad**
+Nombre requerido: **Estandar Universidad**
 
-| Condicion | Valor requerido |
+| Condicion | Regla configurada |
 | --- | --- |
 | Bugs | Bloquear si es mayor que 0 |
 | Coverage | Bloquear si es menor que 60% |
 | Code Smells | Bloquear si es mayor que 5 |
 | Duplicated Lines (%) | Bloquear si es mayor que 5% |
 
-## Analisis inicial
+## Correcciones Aplicadas
 
-Este primer estado conserva los hallazgos solicitados para documentar el punto de partida del laboratorio:
-
-| Hallazgo inicial | Archivo | Estado |
-| --- | --- | --- |
-| Bug: `orElse(null)` en `buscar()` | `ProductoService` | Corregido con `NoSuchElementException` |
-| Code Smell: inyeccion por campo con `@Autowired` | `ProductoService` | Corregido con inyeccion por constructor |
-| Code Smell: `n.equals("")` | `ProductoService` | Corregido con `nombre.isBlank()` |
-| Code Smell: alta complejidad en `procesarProducto()` | `ProductoService` | Corregido extrayendo `validarDatos()` |
-
-## Correcciones aplicadas
-
-| Requisito de la rubrica | Evidencia en el codigo |
+| Requisito de la rubrica | Evidencia |
 | --- | --- |
-| `buscar()` no retorna `null` | Lanza `NoSuchElementException` con mensaje descriptivo |
-| Prueba para id inexistente | `buscarLanzaExcepcionCuandoProductoNoExiste()` |
-| Inyeccion por constructor | `ProductoService(ProductoRepository productoRepository)` |
-| Uso de `isBlank()` | Validacion de nombre en `validarDatos()` |
-| Menor complejidad ciclomática | `procesarProducto()` delega validaciones a `validarDatos()` |
+| Corregir bug `orElse(null)` | `ProductoService.buscar()` lanza `NoSuchElementException` |
+| Probar id inexistente | `buscarLanzaExcepcionCuandoProductoNoExiste()` |
+| Reemplazar `@Autowired` en campo | Inyeccion por constructor en `ProductoService` |
+| Reemplazar `equals("")` | Validacion con `nombre.isBlank()` |
+| Reducir complejidad ciclomática | `procesarProducto()` delega en `validarDatos()` |
+| Integrar cobertura | JaCoCo genera `target/site/jacoco/jacoco.xml` |
+| Automatizar inspeccion | Workflow `.github/workflows/ci.yml` |
 
-## Ejecucion local
+## Comparacion Antes / Despues
+
+| Metrica | Analisis inicial | Segundo analisis | Resultado esperado |
+| --- | --- | --- | --- |
+| Bugs | 1: retorno `null` en `buscar()` | 0 | Mejora confirmada |
+| Code Smells | Al menos 3: `@Autowired`, `equals("")`, complejidad alta | 3 menos | Mejora confirmada |
+| Coverage | Reporte JaCoCo inicial | Reporte JaCoCo actualizado con mas pruebas | Mayor o igual a 60% |
+| Duplicated Lines (%) | Revisar dashboard inicial | Revisar segundo dashboard | Menor o igual a 5% |
+| Quality Gate | Puede fallar inicialmente | Debe pasar o indicar condicion pendiente | Evidencia en dashboard |
+
+## Evidencias
+
+Las capturas deben guardarse en la carpeta `capturas/` con estos nombres para que aparezcan aqui:
+
+| Momento | Captura | Que debe mostrar |
+| --- | --- | --- |
+| Antes de correcciones | `capturas/sonarqube-antes.png` | Bug y Code Smells iniciales |
+| Despues de correcciones | `capturas/sonarqube-despues.png` | Reduccion de Bugs y Code Smells |
+
+### Dashboard inicial
+
+![Dashboard antes de correcciones](capturas/sonarqube-antes.png)
+
+### Dashboard despues de correcciones
+
+![Dashboard despues de correcciones](capturas/sonarqube-despues.png)
+
+## Ejecucion Local
+
+Compilar, ejecutar pruebas y generar reporte JaCoCo:
 
 ```bash
 mvn clean verify
 ```
 
-## Analisis con SonarQube local
+Ejecutar la aplicacion:
 
-1. Iniciar SonarQube en Docker y abrir `http://localhost:9000`.
-2. Crear el Quality Gate **Estandar Universidad** con las cuatro condiciones de la rubrica.
-3. Asignar el Quality Gate al proyecto **Productos Service**.
-4. Ejecutar:
+```bash
+mvn spring-boot:run
+```
+
+Endpoints principales:
+
+| Metodo | Ruta | Descripcion |
+| --- | --- | --- |
+| GET | `/api/productos` | Lista productos |
+| GET | `/api/productos/{id}` | Busca producto por id |
+| POST | `/api/productos` | Crea producto validando nombre, precio y stock |
+
+## SonarQube Local
+
+Levantar SonarQube con Docker:
+
+```bash
+docker compose up -d
+```
+
+Abrir `http://localhost:9000`, crear el Quality Gate **Estandar Universidad**, asignarlo al proyecto **Productos Service** y ejecutar:
 
 ```bash
 mvn clean verify sonar:sonar -Dsonar.token=TU_TOKEN
 ```
 
-## Evidencias
+El archivo `sonar-project.properties` documenta las rutas de codigo fuente, pruebas, binarios y reporte JaCoCo usadas por el analisis.
 
-Agregar aqui las capturas del dashboard:
+## GitHub Actions
 
-| Momento | Captura | Resultado |
-| --- | --- | --- |
-| Antes de correcciones | `capturas/sonarqube-antes.png` | Pendiente |
-| Despues de correcciones | `capturas/sonarqube-despues.png` | Pendiente |
+El workflow `.github/workflows/ci.yml` se ejecuta en cada `push` y `pull_request` hacia `main`.
 
-## Progreso de commits sugerido
+Para activar el paso de SonarCloud en GitHub:
+
+1. Crear el secreto `SONAR_TOKEN` en `Settings -> Secrets and variables -> Actions`.
+2. Crear la variable `SONAR_ORGANIZATION` en `Settings -> Secrets and variables -> Actions -> Variables`.
+3. Verificar que el proyecto exista en SonarCloud.
+
+Si esas credenciales no existen, el workflow conserva la verificacion principal con `mvn clean verify`.
+
+## Commits Requeridos
 
 | Commit | Mensaje sugerido | Contenido |
 | --- | --- | --- |
 | 1 | `docs: documentar analisis inicial de sonarqube` | Proyecto base, JaCoCo, SonarQube y hallazgos iniciales |
 | 2 | `fix: corregir bug y code smells de producto service` | Bug `orElse(null)`, constructor injection, `isBlank()` y extraccion de validaciones |
-| 3 | `ci: automatizar analisis de calidad con github actions` | Workflow, README final y evidencias comparativas |
+| 3 | `ci: automatizar analisis de calidad con github actions` | Workflow, README final, Docker Compose y evidencias comparativas |
